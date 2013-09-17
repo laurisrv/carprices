@@ -1,6 +1,19 @@
 var fuelChart, makeCountChart, makeModelCountChart, yearlyChart, yearlyPriceChart, makeModelAgingChart, priceCountChart, engineCountChart, powerCountChart;
 // load data from a csv file
-d3.csv("cars20130908.csv", function(data) {
+d3.csv("data/cars20130908_min.csv", function(data) {
+//d3.csv("cars20130908.csv", function(data) {
+	if (window.hasOwnProperty('names20130908')) {
+		data.forEach(function(d, i) {
+			if(d.id===undefined)
+				d.id = i;
+			if (d.makeid)
+				d.make = names20130908.make[d.makeid];
+			if (d.modelid)
+				d.model = names20130908.model[d.modelid];
+			if (d.fuelid)
+				d.fuel = names20130908.fuel[d.fuelid];
+		});
+	}
 	var numberFormat = d3.format(".2f");
 	fuelChart = dc.pieChart("#fuel-chart");
 	makeCountChart = dc.cappedRowChart("#make-count-chart");
@@ -450,8 +463,8 @@ d3.csv("cars20130908.csv", function(data) {
 		.title(function(p) {
 		return p.key
 			+ "\n"
-			+ "Initial price: " + initialPriceFunc(p) + "\n"
-			+ "Half age: " + halfAgeFunc(p) + "\n"
+			+ "Calculated 2010 model price: " + initialPriceFunc(p) + "\n"
+			+ "Half age (time to lose half price): " + halfAgeFunc(p) + "\n"
 			+ "r2: " + reducerlib.linearFit.r2(p) + "\n"
 			+ "Count: " + p.value.count
 			;
