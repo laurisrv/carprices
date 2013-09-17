@@ -1,41 +1,104 @@
-<!doctype html>
+<!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="chrome=1">
-    <title>Carprices by laurisrv</title>
+	<head>
+		<title></title>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<link rel="stylesheet" href="css/bootstrap.min.css" rel="stylesheet"/>
+		<link rel="stylesheet" type="text/css" href="css/dc.css"/>
+		<script type="text/javascript" src="js/lib/d3.v3.min.js"></script>
+		<script type="text/javascript" src="js/lib/crossfilter.min.js"></script>
+		<script type="text/javascript" src="js/lib/dc.min.js"></script>
+		<script type="text/javascript" src="js/reducerlib.js"></script>
+		<script type="text/javascript" src="js/cappedrowchart.js"></script>
+		<!--<script type="text/javascript" src="js/capped-bubble-chart.js"></script>-->
+		<style>
+			.dc-chart g.row text {
+				fill: initial;
+			}
+		</style>
+	</head>
+	<body>
+		<div >
+			<h2>Car prices</h2>(2013 09 data, in LTL)
+			<h5 class="dc-car-data-count" style="clear:both;">
+				<span class="filter-count"></span> selected out of <span class="total-count"></span> records | <a
+					href="javascript:dc.filterAll(); dc.renderAll();">Reset All</a>
+			</h5>
+			<div class="clearfix"></div>
 
-    <link rel="stylesheet" href="stylesheets/styles.css">
-    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
-    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
-    <!--[if lt IE 9]>
-    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
-  </head>
-  <body>
-    <div class="wrapper">
-      <header>
-        <h1>Carprices</h1>
-        <p>Visual analysis of car prices</p>
+			<div id="make-count-chart">
+				<strong>Car manufacturer<input type="text" onkeyup="makeCountChart.requiredPartialKeyValue(this.value);
+						makeCountChart.doRedraw();" style="width:60px;"/></strong>
+				<a class="reset" href="javascript:makeCountChart.filterAll();dc.redrawAll();" style="display: none;">reset</a>
 
-        <p class="view"><a href="https://github.com/laurisrv/carprices">View the Project on GitHub <small>laurisrv/carprices</small></a></p>
+				<div class="clearfix"></div>
+			</div>
 
+			<div id="make-model-count-chart">
+				<strong>Car model<input type="text" onkeyup="makeModelCountChart.requiredPartialKeyValue(this.value);
+						makeModelCountChart.doRedraw();" style="width:60px;"/></strong>
+				<a class="reset" href="javascript:makeModelCountChart.filterAll();dc.redrawAll();" style="display: none;">reset</a>
 
-        <ul>
-          <li><a href="https://github.com/laurisrv/carprices/zipball/master">Download <strong>ZIP File</strong></a></li>
-          <li><a href="https://github.com/laurisrv/carprices/tarball/master">Download <strong>TAR Ball</strong></a></li>
-          <li><a href="https://github.com/laurisrv/carprices">View On <strong>GitHub</strong></a></li>
-        </ul>
-      </header>
-      <section>
-        <p>Initial page content</p>
-      </section>
-      <footer>
-        <p>This project is maintained by <a href="https://github.com/laurisrv">laurisrv</a></p>
-        <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></small></p>
-      </footer>
-    </div>
-    <script src="javascripts/scale.fix.js"></script>
-    
-  </body>
+				<div class="clearfix"></div>
+			</div>
+			
+			<div class="dc-chart">
+				<div id="yearly-price-chart" style="float:none">
+					<strong>Price trends</strong> 
+					<span class="reset" style="display: none;">range: <span class="filter"></span></span>
+					<a class="reset" href="javascript:yearlyPriceChart.filterAll();dc.redrawAll();" style="display: none;">reset</a>
+
+					<div class="clearfix"></div>
+				</div>
+				<div id="yearly-chart" style="float:none">
+					<strong>Count by year</strong>
+					<span class="reset" style="display: none;">range: <span class="filter"></span></span>
+					<a class="reset" href="javascript:yearlyChart.filterAll();dc.redrawAll();" style="display: none;">reset</a>
+
+					<div class="clearfix"></div>
+				</div>
+			</div>
+			<div id="price-count-chart">
+				<strong>Count by price</strong>
+				<span class="reset" style="display: none;">range: <span class="filter"></span></span>
+				<a class="reset" href="javascript:priceCountChart.filterAll();dc.redrawAll();" style="display: none;">reset</a>
+
+				<div class="clearfix"></div>
+			</div>
+			<div id="fuel-chart">
+				<strong>Fuel</strong>
+				<a class="reset" href="javascript:fuelChart.filterAll();dc.redrawAll();" style="display: none;">reset</a>
+
+				<div class="clearfix"></div>
+			</div>
+			<div id="engine-count-chart">
+				<strong>Engines</strong>
+				<span class="reset" style="display: none;">range: <span class="filter"></span></span>
+				<a class="reset" href="javascript:engineCountChart.filterAll();dc.redrawAll();" style="display: none;">reset</a>
+
+				<div class="clearfix"></div>
+			</div>
+			<div id="power-count-chart">
+				<strong>Engine power</strong>
+				<span class="reset" style="display: none;">range: <span class="filter"></span></span>
+				<a class="reset" href="javascript:powerCountChart.filterAll();dc.redrawAll();" style="display: none;">reset</a>
+
+				<div class="clearfix"></div>
+			</div>
+			
+			<div id="make-model-aging-chart">
+				<strong>Car depreciation</strong>
+				<a class="reset" href="javascript:makeModelAgingChart.filterAll();dc.redrawAll();" style="display: none;">reset</a>
+
+				<div class="clearfix"></div>
+			</div>
+			
+
+			<script type="text/javascript" src="js/carpricecharts.js">
+			</script>
+			<div class="clearfix"></div>
+		</div>
+	</body>
 </html>
